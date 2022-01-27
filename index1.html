@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index1.css">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <title>Document</title>
+</head>
+<body>
+  <img class="wave" src="">
+	<div class="container">
+		<div class="img">
+			<img src="movie.svg">
+		</div>
+		<div class="login-content">
+			<form>
+				<img src="profile.svg">
+				<h2 class="title">Welcome</h2>
+           		<div class="input-div one">
+           		   <div class="i">
+           		   		<i class="fas fa-user"></i>
+           		   </div>
+           		   <div class="div">
+           		   		<h5>Username</h5>
+           		   		<input type="text" class="input">
+           		   </div>
+           		</div>
+           		<div class="input-div pass">
+           		   <div class="i"> 
+           		    	<i class="fas fa-lock"></i>
+           		   </div>
+           		   <div class="div">
+           		    	<h5>Password</h5>
+           		    	<input type="password" class="input">
+            	   </div>
+            	</div>
+            	<a href="#">Forgot Password?</a>
+            	<button id="signIn" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<!-- <script type="module" src="https://www.gstatic.com/firebasejs/9.6.4/firebase-auth.js"></script> -->
+<!-- <script type="module" src="https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js"></script> -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/9.6.4/init.js"></script> -->
+  <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
+      import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-auth.js";
+      import { getFirestore,doc,setDoc } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-firestore.js";
+
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBOCTBC0IHlsvp1qgkJlTliCmV8kdV7uFU",
+        authDomain: "movieapi-63060.firebaseapp.com",
+        projectId: "movieapi-63060",
+        storageBucket: "movieapi-63060.appspot.com",
+        messagingSenderId: "651769319833",
+        appId: "1:651769319833:web:9a5aa341a87fdbcc878308"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth=getAuth(app);
+      const database=getFirestore(app);
+      const provider = new GoogleAuthProvider();
+
+      // console.log("hi");
+      const inputs = document.querySelectorAll(".input");
+      const signInWithGoogle=document.getElementById('signIn');
+
+      const googleSignin=async ()=>{
+        // await console.log('m');
+        await signInWithPopup(auth, provider)
+          .then((result) => {
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            const user = result.user;
+          }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.email;
+            const credential = GoogleAuthProvider.credentialFromError(error);
+          });
+      }
+
+      signInWithGoogle.addEventListener('click',googleSignin());
+      // async function send(){
+      //   await setDoc(doc(database, "names", "demo"), {
+      //   name:"Mohan",
+      //   age:10
+      // });
+      // }
+
+      // send();
+
+      function addcl(){
+        let parent = this.parentNode.parentNode;
+        parent.classList.add("focus");
+      }
+
+      function remcl(){
+        let parent = this.parentNode.parentNode;
+        if(this.value == ""){
+          parent.classList.remove("focus");
+        }
+      }
+
+
+      inputs.forEach(input => {
+        input.addEventListener("focus", addcl);
+        input.addEventListener("blur", remcl);
+      });
+</script>
